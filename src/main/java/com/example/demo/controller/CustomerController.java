@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/customers")
@@ -27,7 +28,7 @@ public class CustomerController {
         }
 
         @GetMapping("/{id}")
-        Customer getCustomerbyId(@PathVariable Long id){
+        Optional<Customer> getCustomerbyId(@PathVariable Long id){
                 return  service.getCustomerById(id);
         }
 
@@ -51,6 +52,15 @@ public class CustomerController {
             return service.saveCustomerList(cust);
         }
 
+        @PutMapping("/{Id}")
+        Customer UpdateCustomerById(@PathVariable Long Id , @RequestBody Customer cust){
+            return service.UpdateCustomer(Id,cust);
+        }
+
+        @DeleteMapping("/{Id}")
+        void DeleteCustomerById(@PathVariable  Long Id){
+            service.deleteCustomer(Id);
+        }
 
 
 }
