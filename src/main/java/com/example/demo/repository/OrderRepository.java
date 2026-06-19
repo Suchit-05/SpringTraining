@@ -3,27 +3,42 @@ package com.example.demo.repository;
 import com.example.demo.entity.Orders;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.query.Param;
 
-@Repository
-public interface OrderRepository extends JpaRepository<Orders,Long> {
+import java.util.List;
 
-        @Query("""
-                 select count(o)
-                 from Orders o
-                 Where o.customer.customerId=:customerId""")
-        Long countOrder();
+public interface OrderRepository
+        extends JpaRepository<Orders,Long> {
 
         @Query("""
-                select sum(o.totalPrice)
-                from Orders o
-                Where o.customer.customerId=:customerId""")
-        double totalAmount(Long customerId);
-
+            select count(o)
+            from Orders o
+            where o.customer.customerId=:customerId
+            """)
+        Long countOrder(
+                @Param("customerId")
+                Long customerId
+        );
 
         @Query("""
-                select sum(o.totalPrice)
-                from Orders o""")
-        double totalRevenue();
+            select sum(o.totalPrice)
+            from Orders o
+            where o.customer.customerId=:customerId
+            """)
+        Double totalAmount(
+                @Param("customerId")
+                Long customerId
+        );
+
+        @Query("""
+            select sum(o.totalPrice)
+            from Orders o
+            """)
+        Double totalRevenue();
+
+        List<Orders>
+        findByCustomerCustomerId(
+                Long customerId
+        );
 
 }

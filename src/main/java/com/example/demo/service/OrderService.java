@@ -22,33 +22,90 @@ public class OrderService {
     @Autowired
     private ProductRepository productRepo;
 
-
     public Orders placeOrder(Long custId , Long ProdId , int qty){
-        Customer customer=custRepo.findById(custId).orElse(null);
 
-        if(customer!=null){
-            Product product=productRepo.findById(ProdId).orElse(null);
+        Customer customer =
+                custRepo.findById(custId)
+                        .orElse(null);
 
-            if(product!=null){
+        if(customer != null){
+
+            Product product =
+                    productRepo.findById(ProdId)
+                            .orElse(null);
+
+            if(product != null){
+
+                // check stock
+                if(product.getQuantity() < qty){
+                    return null;
+                }
+
                 Orders order = new Orders();
+
                 order.setCustomer(customer);
+
                 order.setProduct(product);
+
                 order.setQuantityOrdered(qty);
 
-                order.setTotalPrice(product.getPrice()*qty);
+                order.setTotalPrice(
+                        product.getPrice()*qty
+                );
 
+                // reduce quantity
+                product.setQuantity(
+                        product.getQuantity()-qty
+                );
+
+                // update product table
+                productRepo.save(product);
+
+                // save order
                 return orderRepo.save(order);
             }
         }
+
         return null;
     }
-
 
     public List<Orders> getAllOrders(){
         return  orderRepo.findAll();
     }
 
+    public List<Orders>
+    getOrdersByCustomer(
+            Long customerId
+    ){
+        return orderRepo
+                .findByCustomerCustomerId(
+                        customerId
+                );
+    }
 
+    public Long countOrders(
+            Long customerId
+    ){
+        return orderRepo
+                .countOrder(
+                        customerId
+                );
+    }
+
+    public Double totalBill(
+            Long customerId
+    ){
+        return orderRepo
+                .totalAmount(
+                        customerId
+                );
+    }
+
+    public Double totalRevenue(){
+
+        return orderRepo
+                .totalRevenue();
+    }
 
 
 }

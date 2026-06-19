@@ -26,4 +26,56 @@ public class OrderController {
         return service.getAllOrders();
     }
 
+    @GetMapping(
+            "/customer/{customerId}"
+    )
+    public List<Orders>
+    getOrdersByCustomer(
+            @PathVariable
+            Long customerId
+    ){
+
+        return service
+                .getOrdersByCustomer(
+                        customerId
+                );
+
+    }
+
+    @GetMapping(
+            "/count/{customerId}"
+    )
+    public Long countOrders(
+            @PathVariable
+            Long customerId
+    ){
+
+        return service
+                .countOrders(
+                        customerId
+                );
+    }
+
+    @GetMapping(
+            "/bill/{customerId}"
+    )
+    public Double totalBill(
+            @PathVariable
+            Long customerId
+    ){
+
+        return service
+                .totalBill(
+                        customerId
+                );
+    }
+
+    @GetMapping(
+            "/revenue"
+    )
+    public Double totalRevenue(){
+
+        return service
+                .totalRevenue();
+    }
 }

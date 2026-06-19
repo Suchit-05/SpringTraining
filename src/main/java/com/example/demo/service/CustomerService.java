@@ -49,7 +49,6 @@ public class CustomerService {
         Customer ExistingCust=repository.findById(id).orElse(null);
 
         if(ExistingCust !=null){
-            ExistingCust.setCustomerId(cust.getCustomerId());
             ExistingCust.setName(cust.getName());
             ExistingCust.setAge(cust.getAge());
             ExistingCust.setEmail(cust.getEmail());
